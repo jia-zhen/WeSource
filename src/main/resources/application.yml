@@ -1,0 +1,25 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  #环境配置
+  profiles:
+    active: dev
+
+#mybatis配置
+mybatis:
+  map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.we.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+
+
+
+

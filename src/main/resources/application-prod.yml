@@ -1,0 +1,16 @@
+spring:
+#  数据库配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      jdbc-url: jdbc:mysql://118.25.100.204:3306/weSource?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+      #生存周期
+      max-lifetime: 30000
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      connectionTimeout: 30000
+      #连接池中允许的最大连接数
+      maximum-pool-size: 10
