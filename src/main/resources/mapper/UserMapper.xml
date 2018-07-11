@@ -1,190 +1,83 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.we.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.we.model.User" >
-    <constructor >
-      <idArg column="USER_ID" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="USER_NAME" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="PASSWORD" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="DEPT_ID" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="EMAIL" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="MOBILE" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="STATUS" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="CRATE_TIME" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="MODIFY_TIME" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="LAST_LOGIN_TIME" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="SSEX" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="AVATAR" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="DESCRIPTION" jdbcType="VARCHAR" javaType="java.lang.String" />
-    </constructor>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.we.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.we.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="DEPT_ID" jdbcType="DECIMAL" property="deptId" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="CRATE_TIME" jdbcType="TIMESTAMP" property="crateTime" />
+    <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="LAST_LOGIN_TIME" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="SSEX" jdbcType="CHAR" property="ssex" />
+    <result column="THEME" jdbcType="VARCHAR" property="theme" />
+    <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
   </resultMap>
-  <sql id="Base_Column_List" >
-    USER_ID, USER_NAME, PASSWORD, DEPT_ID, EMAIL, MOBILE, STATUS, CRATE_TIME, MODIFY_TIME, 
-    LAST_LOGIN_TIME, SSEX, AVATAR, DESCRIPTION
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_user_info
-    where USER_ID = #{userId,jdbcType=INTEGER}
+
+  <select id="findUserWithDept" resultType="user" parameterType="user">
+    select u.user_id userId,u.username,u.email,u.mobile,u.status,u.crate_time crateTime,
+    u.ssex,d.dept_name deptName from t_user u
+    left join t_dept d on(u.dept_id = d.dept_id)
+    where 1=1
+    <if test="username != null and username != ''">
+      AND u.username = #{username}
+    </if>
+    <if test="deptId != null and deptId != ''">
+      AND d.dept_id = #{deptId}
+    </if>
+    <if test="ssex != null and ssex != ''">
+      AND u.ssex = #{ssex}
+    </if>
+    <if test="status != null and status != ''">
+      AND u.status = #{status}
+    </if>
+    order by u.user_id
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_user_info
-    where USER_ID = #{userId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.we.model.User" >
-    insert into t_user_info (USER_ID, USER_NAME, PASSWORD, 
-      DEPT_ID, EMAIL, MOBILE, 
-      STATUS, CRATE_TIME, MODIFY_TIME, 
-      LAST_LOGIN_TIME, SSEX, AVATAR, 
-      DESCRIPTION)
-    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{deptId,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{crateTime,jdbcType=VARCHAR}, #{modifyTime,jdbcType=VARCHAR}, 
-      #{lastLoginTime,jdbcType=VARCHAR}, #{ssex,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{description,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.we.model.User" >
-    insert into t_user_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        USER_ID,
-      </if>
-      <if test="userName != null" >
-        USER_NAME,
-      </if>
-      <if test="password != null" >
-        PASSWORD,
-      </if>
-      <if test="deptId != null" >
-        DEPT_ID,
-      </if>
-      <if test="email != null" >
-        EMAIL,
-      </if>
-      <if test="mobile != null" >
-        MOBILE,
-      </if>
-      <if test="status != null" >
-        STATUS,
-      </if>
-      <if test="crateTime != null" >
-        CRATE_TIME,
-      </if>
-      <if test="modifyTime != null" >
-        MODIFY_TIME,
-      </if>
-      <if test="lastLoginTime != null" >
-        LAST_LOGIN_TIME,
-      </if>
-      <if test="ssex != null" >
-        SSEX,
-      </if>
-      <if test="avatar != null" >
-        AVATAR,
-      </if>
-      <if test="description != null" >
-        DESCRIPTION,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null" >
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="deptId != null" >
-        #{deptId,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="crateTime != null" >
-        #{crateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=VARCHAR},
-      </if>
-      <if test="lastLoginTime != null" >
-        #{lastLoginTime,jdbcType=VARCHAR},
-      </if>
-      <if test="ssex != null" >
-        #{ssex,jdbcType=VARCHAR},
-      </if>
-      <if test="avatar != null" >
-        #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        #{description,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.we.model.User" >
-    update t_user_info
-    <set >
-      <if test="userName != null" >
-        USER_NAME = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        PASSWORD = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="deptId != null" >
-        DEPT_ID = #{deptId,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        EMAIL = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        MOBILE = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        STATUS = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="crateTime != null" >
-        CRATE_TIME = #{crateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="modifyTime != null" >
-        MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR},
-      </if>
-      <if test="lastLoginTime != null" >
-        LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=VARCHAR},
-      </if>
-      <if test="ssex != null" >
-        SSEX = #{ssex,jdbcType=VARCHAR},
-      </if>
-      <if test="avatar != null" >
-        AVATAR = #{avatar,jdbcType=VARCHAR},
-      </if>
-      <if test="description != null" >
-        DESCRIPTION = #{description,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where USER_ID = #{userId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.we.model.User" >
-    update t_user_info
-    set USER_NAME = #{userName,jdbcType=VARCHAR},
-      PASSWORD = #{password,jdbcType=VARCHAR},
-      DEPT_ID = #{deptId,jdbcType=VARCHAR},
-      EMAIL = #{email,jdbcType=VARCHAR},
-      MOBILE = #{mobile,jdbcType=VARCHAR},
-      STATUS = #{status,jdbcType=VARCHAR},
-      CRATE_TIME = #{crateTime,jdbcType=VARCHAR},
-      MODIFY_TIME = #{modifyTime,jdbcType=VARCHAR},
-      LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=VARCHAR},
-      SSEX = #{ssex,jdbcType=VARCHAR},
-      AVATAR = #{avatar,jdbcType=VARCHAR},
-      DESCRIPTION = #{description,jdbcType=VARCHAR}
-    where USER_ID = #{userId,jdbcType=INTEGER}
-  </update>
+
+
+  <select id="findUserWithRole" resultType="userWithRole">
+		select u.user_id userId,u.username,u.dept_id deptId,u.email,u.mobile,
+		u.status,u.ssex,ur.role_id roleId from t_user u
+		left join t_user_role ur on (u.user_id = ur.user_id)
+		where u.user_id = #{userId}
+  </select>
+
+  <select id="findUserProfile" resultType="user" parameterType="user">
+	SELECT
+		U .USERNAME,
+		U .USER_ID userId,
+		D .DEPT_NAME deptName,
+		U .mobile,
+		U .email,
+		U .avatar,
+		U .description,
+		U .ssex,
+		U .dept_id deptId,
+		group_concat(r.role_name) AS roleName
+	FROM
+		t_user U
+	LEFT JOIN t_dept D ON U .DEPT_ID = D .DEPT_ID
+	LEFT JOIN T_USER_ROLE ur ON U .user_id = ur.user_id
+	LEFT JOIN t_role r ON r.role_id = ur.role_id
+	WHERE
+		U .USER_ID = #{userId}
+	GROUP BY
+		U .username,
+		D .dept_name,
+		U .mobile,
+		U .email,
+		U .avatar,
+		U .description,
+		U .ssex,
+		U .USER_ID,
+		U .dept_id
+  </select>
+
 </mapper>

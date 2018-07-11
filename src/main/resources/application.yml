@@ -20,6 +20,20 @@ mybatis:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
 
 
+#mapper
+#mappers 多个接口时逗号隔开
+mapper:
+    mappers:
+         com.we.dao.MyMapper
+    not-empty: false
+    identity: MYSQL
+
+#pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
 
 
 
