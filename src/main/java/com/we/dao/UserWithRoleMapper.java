@@ -1,9 +1,8 @@
 package com.we.dao;
 
+import com.we.config.MyMapper;
 import com.we.model.UserWithRole;
 
-public interface UserWithRoleMapper {
-    int insert(UserWithRole record);
+public interface UserWithRoleMapper extends MyMapper<UserWithRole> {
 
-    int insertSelective(UserWithRole record);
 }

@@ -2,10 +2,15 @@ package com.we.model;
 
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Data
 public class Menu {
+
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Long menuId;
 
     private Long parentId;

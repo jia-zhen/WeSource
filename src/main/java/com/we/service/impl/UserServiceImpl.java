@@ -1,6 +1,6 @@
 package com.we.service.impl;
 import com.we.dao.UserMapper;
-import com.we.dao.UserRoleMapper;
+import com.we.dao.UserWithRoleMapper;
 import com.we.model.User;
 import com.we.model.UserWithRole;
 import com.we.service.UserRoleService;
@@ -27,7 +27,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 	private UserMapper userMapper;
 
 	@Autowired
-	private UserRoleMapper userRoleMapper;
+	private UserWithRoleMapper userRoleMapper;
 
 	@Autowired
 	private UserRoleService userRoleService;
@@ -44,23 +44,13 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 		}
 	}
 
-	@Override
-	public List<User> findUserWithDept(User user) {
-		try {
-			return this.userMapper.findUserWithDept(user);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
-	}
 
 	@Override
 	@Transactional
 	public void registUser(User user) {
 		user.setCrateTime(new Date());
-		user.setTheme(User.DEFAULT_THEME);
-		user.setAvatar(User.DEFAULT_AVATAR);
-		user.setSsex(User.SEX_UNKNOW);
+		user.setStatus(User.STATUS_VALID);
+		user.setSsex(user.getSsex());
 		user.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
 		this.save(user);
 		UserWithRole ur = new UserWithRole();
@@ -74,8 +64,6 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 	@Transactional
 	public void addUser(User user, Long[] roles) {
 		user.setCrateTime(new Date());
-		user.setTheme(User.DEFAULT_THEME);
-		user.setAvatar(User.DEFAULT_AVATAR);
 		user.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
 		this.save(user);
 		setUserRoles(user, roles);
@@ -135,18 +123,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
 
 	@Override
 	public UserWithRole findById(Long userId) {
-		List<UserWithRole> list = this.userMapper.findUserWithRole(userId);
-		List<Long> roleList = new ArrayList<>();
-		for (UserWithRole uwr : list) {
-			roleList.add(uwr.getRoleId());
-		}
-		if (list.size() == 0) {
-			return null;
-		}
-		UserWithRole userWithRole = list.get(0);
-		userWithRole.setRoleIds(roleList);
-		return userWithRole;
+		return  null;
 	}
+
 
 	@Override
 	public User selectByPrimaryKey(Long userId) {

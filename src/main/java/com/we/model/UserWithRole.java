@@ -6,6 +6,8 @@ import java.util.List;
 
 @Data
 public class UserWithRole {
+
+
     private Long userId;
 
     private Long roleId;

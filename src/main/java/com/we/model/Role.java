@@ -2,10 +2,15 @@ package com.we.model;
 
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Data
 public class Role {
+
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Long roleId;
 
     private String roleName;

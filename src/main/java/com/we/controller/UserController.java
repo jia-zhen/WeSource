@@ -15,9 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +40,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/getUser")
-	public ResultVO<User> getUser(Long userId) {
+	public ResultVO<User> getUser( @RequestBody Long userId) {
 		try {
 			User user = userService.selectByPrimaryKey(userId);
 			return ResultVOUtil.success("1","获取用户信息成功",user);
@@ -51,19 +49,19 @@ public class UserController extends BaseController {
 			return ResultVOUtil.error("0","获取用户信息失败，请联系网站管理员！");
 		}
 	}
-	@ApiOperation(value="获取用户列表", notes="获取用户列表")
-	@RequestMapping("/list")
-	public ResultVO<User> userList(QueryRequestUtils request, User user) {
-		PageHelper.startPage(request.getPageNum(), request.getPageSize());
-		List<User> list = userService.findUserWithDept(user);
-		PageInfo<User> pageInfo = new PageInfo<>(list);
-		return ResultVOUtil.success("1","分页查询用户信息成功",getDataTable(pageInfo));
-	}
+//	@ApiOperation(value="获取用户列表", notes="获取用户列表")
+//	@RequestMapping("/list")
+//	public ResultVO<User> userList(QueryRequestUtils request, User user) {
+//		PageHelper.startPage(request.getPageNum(), request.getPageSize());
+//		List<User> list = userService.(user);
+//		PageInfo<User> pageInfo = new PageInfo<>(list);
+//		return ResultVOUtil.success("1","分页查询用户信息成功",getDataTable(pageInfo));
+//	}
 
 
 
-	@RequestMapping("/regist")
-	public ResultVO<User> regist(User user) {
+	@PostMapping("/regist")
+	public ResultVO<User> regist(@RequestBody User user) {
 		try {
 			User result = this.userService.findByName(user.getUsername());
 			if (result != null) {

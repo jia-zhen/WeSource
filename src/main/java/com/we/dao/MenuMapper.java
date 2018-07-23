@@ -1,19 +1,8 @@
 package com.we.dao;
 
+import com.we.config.MyMapper;
 import com.we.model.Menu;
 
-public interface MenuMapper {
-    int deleteByPrimaryKey(Long menuId);
+public interface MenuMapper extends MyMapper<Menu> {
 
-    int insert(Menu record);
-
-    int insertSelective(Menu record);
-
-    Menu selectByPrimaryKey(Long menuId);
-
-    int updateByPrimaryKeySelective(Menu record);
-
-    int updateByPrimaryKeyWithBLOBs(Menu record);
-
-    int updateByPrimaryKey(Menu record);
 }

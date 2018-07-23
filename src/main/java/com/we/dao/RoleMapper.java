@@ -1,21 +1,12 @@
 package com.we.dao;
 
+import com.we.config.MyMapper;
 import com.we.model.Role;
 
 import java.util.List;
 
-public interface RoleMapper {
-    int deleteByPrimaryKey(Long roleId);
+public interface RoleMapper extends MyMapper<Role> {
 
-    int insert(Role record);
-
-    int insertSelective(Role record);
-
-    Role selectByPrimaryKey(Long roleId);
-
-    int updateByPrimaryKeySelective(Role record);
-
-    int updateByPrimaryKey(Role record);
 
     List<Role> findUserRole(String userName);
 }
