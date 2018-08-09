@@ -63,7 +63,7 @@ public class UserController extends BaseController {
 	@PostMapping("/regist")
 	public ResultVO<User> regist(@RequestBody User user) {
 		try {
-			User result = this.userService.findByName(user.getUsername());
+			User result = this.userService.findByName(user.getUserName());
 			if (result != null) {
 				return ResultVOUtil.warn("2","该用户名已被使用！");
 			}
@@ -128,7 +128,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/checkPassword")
 	public boolean checkPassword(String password) {
 		User user = getCurrentUser();
-		String encrypt = MD5Utils.encrypt(user.getUsername().toLowerCase(), password);
+		String encrypt = MD5Utils.encrypt(user.getUserName().toLowerCase(), password);
 		return user.getPassword().equals(encrypt);
 	}
 

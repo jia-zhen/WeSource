@@ -22,7 +22,7 @@ public class User {
     @GeneratedValue(generator = "JDBC")
     private Long userId;
 
-    private String username;
+    private String userName;
 
     private String password;
 
