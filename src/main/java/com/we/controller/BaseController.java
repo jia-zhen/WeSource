@@ -45,14 +45,6 @@ public class BaseController {
 	protected void login(AuthenticationToken token) {
 		getSubject().login(token);
 	}
-	/**
-	 * 权限异常
-	 */
-	@ExceptionHandler({ UnauthorizedException.class, AuthorizationException.class })
-	public ResultVO authorizationException(HttpServletRequest request, HttpServletResponse response) {
 
-		return ResultVOUtil.warn("-998", "没有权限");
-
-	}
 
 }
