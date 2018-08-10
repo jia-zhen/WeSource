@@ -52,7 +52,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
         user.setCrateTime(new Date());
         user.setStatus(User.STATUS_VALID);
         user.setSsex(user.getSsex());
-        user.setPassword(MD5Utils.encrypt(user.getUserName(), user.getPassword()));
+        user.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
         this.save(user);
         UserWithRole ur = new UserWithRole();
         ur.setUserId(user.getUserId());
@@ -65,7 +65,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Transactional
     public void addUser(User user, Long[] roles) {
         user.setCrateTime(new Date());
-        user.setPassword(MD5Utils.encrypt(user.getUserName(), user.getPassword()));
+        user.setPassword(MD5Utils.encrypt(user.getUsername(), user.getPassword()));
         this.save(user);
         setUserRoles(user, roles);
     }
@@ -83,7 +83,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Transactional
     public void updateUser(User user, Long[] roles) {
         user.setPassword(null);
-        user.setUserName(null);
+        user.setUsername(null);
         user.setModifyTime(new Date());
         this.updateNotNull(user);
         Example example = new Example(UserWithRole.class);
@@ -116,8 +116,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void updatePassword(String password) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         Example example = new Example(User.class);
-        example.createCriteria().andCondition("username=", user.getUserName());
-        String newPassword = MD5Utils.encrypt(user.getUserName().toLowerCase(), password);
+        example.createCriteria().andCondition("username=", user.getUsername());
+        String newPassword = MD5Utils.encrypt(user.getUsername().toLowerCase(), password);
         user.setPassword(newPassword);
         this.userMapper.updateByExampleSelective(user, example);
     }

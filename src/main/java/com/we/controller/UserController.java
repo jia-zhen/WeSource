@@ -3,6 +3,7 @@ package com.we.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.we.model.User;
+import com.we.reqModel.ReqUser;
 import com.we.service.UserService;
 import com.we.utils.MD5Utils;
 import com.we.utils.QueryRequestUtils;
@@ -10,8 +11,13 @@ import com.we.utils.ResultVOUtil;
 import com.we.vo.ResultVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.juli.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +29,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
+
+	/**
+	 * 引入日志，注意都是"org.slf4j"包下
+	 */
+	private final static Logger log = LoggerFactory.getLogger(UserController.class);
+
 
 	@Autowired
 	private UserService userService;
@@ -40,10 +52,10 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/getUser")
-	public ResultVO<User> getUser( @RequestBody Long userId) {
+	public ResultVO<User> getUser( @RequestBody User user) {
 		try {
-			User user = userService.selectByPrimaryKey(userId);
-			return ResultVOUtil.success("1","获取用户信息成功",user);
+			User userResult = userService.selectByPrimaryKey(user.getUserId());
+			return ResultVOUtil.success("1","获取用户信息成功",userResult);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultVOUtil.error("0","获取用户信息失败，请联系网站管理员！");
@@ -63,7 +75,7 @@ public class UserController extends BaseController {
 	@PostMapping("/regist")
 	public ResultVO<User> regist(@RequestBody User user) {
 		try {
-			User result = this.userService.findByName(user.getUserName());
+			User result = this.userService.findByName(user.getUsername());
 			if (result != null) {
 				return ResultVOUtil.warn("2","该用户名已被使用！");
 			}
@@ -97,13 +109,17 @@ public class UserController extends BaseController {
 
 	@RequiresPermissions("user:update")
 	@RequestMapping("/update")
-	public ResultVO<User> updateUser(User user, Long[] rolesSelect) {
+	public ResultVO<User> updateUser(@RequestBody ReqUser reqUser) {
+		User user=new User();
+		BeanUtils.copyProperties(reqUser,user);
 		try {
-			if (ON.equalsIgnoreCase(user.getStatus()))
+			if (ON.equalsIgnoreCase(reqUser.getStatus()))
 				user.setStatus(User.STATUS_VALID);
 			else
 				user.setStatus(User.STATUS_LOCK);
-			this.userService.updateUser(user, rolesSelect);
+			String [] roles=reqUser.getRoles().split(",");
+			Long[] rolesL= (Long[]) ConvertUtils.convert(roles,long.class);
+			this.userService.updateUser(user, rolesL);
 			return ResultVOUtil.success( "1","修改用户成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,7 +144,7 @@ public class UserController extends BaseController {
 	@RequestMapping("/checkPassword")
 	public boolean checkPassword(String password) {
 		User user = getCurrentUser();
-		String encrypt = MD5Utils.encrypt(user.getUserName().toLowerCase(), password);
+		String encrypt = MD5Utils.encrypt(user.getUsername().toLowerCase(), password);
 		return user.getPassword().equals(encrypt);
 	}
 
@@ -143,5 +159,9 @@ public class UserController extends BaseController {
 		}
 	}
 
+	@RequestMapping("/unauth")
+	public ResultVO<User> checkLogin() {
+		return ResultVOUtil.warn("0", "没有权限");
+	}
 
 }

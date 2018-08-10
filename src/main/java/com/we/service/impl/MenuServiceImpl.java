@@ -29,7 +29,7 @@ public class MenuServiceImpl extends BaseService<Menu> implements MenuService {
 
 	@Override
 	public List<Menu> findUserPermissions(String userName) {
-		return null;
+		return menuMapper.findUserPermissions(userName);
 	}
 
 	@Override

@@ -1,16 +1,15 @@
-package com.we.model;
+package com.we.reqModel;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-@Table(name = "t_user")
 @Data
-public class User {
+public class ReqUser {
 
     /**
      * 账户状态
@@ -48,5 +47,9 @@ public class User {
 
     private String description;
 
+    @NotBlank(message = "角色信息不能为空")
+    private String  roles;
+
 
 }
+

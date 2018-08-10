@@ -1,21 +1,21 @@
 package com.we.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.we.model.User;
 import com.we.service.UserService;
 import com.we.utils.MD5Utils;
-import com.we.utils.QueryRequestUtils;
 import com.we.utils.ResultVOUtil;
 import com.we.vo.ResultVO;
-import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class LoginController extends BaseController {
@@ -25,15 +25,18 @@ public class LoginController extends BaseController {
 
 
     @PostMapping("/login")
-    public ResultVO login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("rememberMe") Boolean rememberMe) {
+    public ResultVO login(@RequestBody  User user) {
 
-
-        password = MD5Utils.encrypt(username.toLowerCase(), password);
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
+        Map<String,String> map=new HashMap<>();
+        Subject subject = SecurityUtils.getSubject();
+        String password = MD5Utils.encrypt(user.getUsername().toLowerCase(), user.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), password);
         try {
-            super.login(token);
-            this.userService.updateLoginTime(username);
-            return ResultVOUtil.success("1", "登录成功");
+            subject.login(token);
+            this.userService.updateLoginTime(user.getUsername());
+            String sessionId = (String) subject.getSession().getId();
+            map.put("sessionId",sessionId);
+            return ResultVOUtil.success("1", "登录成功",map);
         } catch (UnknownAccountException | IncorrectCredentialsException | LockedAccountException e) {
             return ResultVOUtil.error("0", e.getMessage());
         } catch (AuthenticationException e) {
