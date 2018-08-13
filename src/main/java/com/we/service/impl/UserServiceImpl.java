@@ -6,6 +6,7 @@ import com.we.model.User;
 import com.we.model.UserWithRole;
 import com.we.service.UserRoleService;
 import com.we.service.UserService;
+import com.we.utils.DateUtil;
 import com.we.utils.MD5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +84,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     @Transactional
     public void updateUser(User user, Long[] roles) {
         user.setPassword(null);
-        user.setUsername(null);
-        user.setModifyTime(new Date());
+        user.setModifyTime(DateUtil.getNowDate());
         this.updateNotNull(user);
         Example example = new Example(UserWithRole.class);
         example.createCriteria().andCondition("user_id=", user.getUserId());

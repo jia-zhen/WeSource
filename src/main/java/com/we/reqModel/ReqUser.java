@@ -1,7 +1,6 @@
 package com.we.reqModel;
 
 import lombok.Data;
-import lombok.NonNull;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

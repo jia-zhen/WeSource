@@ -118,7 +118,7 @@ public class UserController extends BaseController {
 			else
 				user.setStatus(User.STATUS_LOCK);
 			String [] roles=reqUser.getRoles().split(",");
-			Long[] rolesL= (Long[]) ConvertUtils.convert(roles,long.class);
+			Long[] rolesL= (Long[]) ConvertUtils.convert(roles,Long.class);
 			this.userService.updateUser(user, rolesL);
 			return ResultVOUtil.success( "1","修改用户成功！");
 		} catch (Exception e) {
