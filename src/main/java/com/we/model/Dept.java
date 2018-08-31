@@ -2,35 +2,43 @@ package com.we.model;
 
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.Date;
+import javax.persistence.*;
 
+
+@Table(name = "t_dept")
 @Data
 public class Dept {
-
+    /**
+     * 部门ID
+     */
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @Column(name = "DEPT_ID")
     private Long deptId;
 
+    /**
+     * 上级部门ID
+     */
+    @Column(name = "PARENT_ID")
     private Long parentId;
 
+    /**
+     * 部门名称
+     */
+    @Column(name = "DEPT_NAME")
     private String deptName;
 
+    /**
+     * 排序
+     */
+    @Column(name = "ORDER_NUM")
     private Long orderNum;
 
+    /**
+     * 创建时间
+     */
+    @Column(name = "CREATE_TIME")
     private Date createTime;
-
-    public Dept() {
-    }
-
-    public Dept(Long deptId, Long parentId, String deptName, Long orderNum, Date createTime) {
-        this.deptId = deptId;
-        this.parentId = parentId;
-        this.deptName = deptName;
-        this.orderNum = orderNum;
-        this.createTime = createTime;
-    }
 
 
 }
