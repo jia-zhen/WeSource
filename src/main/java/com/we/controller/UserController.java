@@ -149,7 +149,7 @@ public class UserController extends BaseController {
 	}
 
 	@RequestMapping("/updatePassword")
-	public ResultVO<User> updatePassword(String newPassword) {
+	public ResultVO<User> updatePassword(@RequestBody  String newPassword) {
 		try {
 			this.userService.updatePassword(newPassword);
 			return ResultVOUtil.success("1","更改密码成功！");
