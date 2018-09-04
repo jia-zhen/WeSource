@@ -12,7 +12,7 @@ import com.we.vo.ResultVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.juli.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
