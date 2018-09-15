@@ -6,11 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Table(name = "t_user")
 @Data
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1425542765947962322L;
 
     /**
      * 账户状态

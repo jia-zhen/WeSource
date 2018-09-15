@@ -2,13 +2,16 @@ package com.we.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 
 @Table(name = "t_dept")
 @Data
-public class Dept {
+public class Dept implements Serializable {
+
+    private static final long serialVersionUID = -1300711243968109878L;
     /**
      * 部门ID
      */
